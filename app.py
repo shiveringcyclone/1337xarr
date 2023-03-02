@@ -76,20 +76,14 @@ def get_table(torrents = p.top(category='Movies')):
     # add rows to the table
     for torrent in torrents['items']:
         table.add_row(torrent['name'], torrent['time'], torrent['seeders'], torrent['size'])
-    return table    
-
-# # create console and table objects
-# console = Console()
-
-# table = get_table()
-
-# # print the table
-# console.print(table)
+    return table
 
 def check_and_download_torrents():
     download_history = DownloadHistory(download_history_db)
     while True:
-        torrents = p.top(category='xxx')
+        # categories = movies, tv, games, music, apps, anime, xxx, other
+        # p.trending(category='anime')
+        torrents = p.top(category='Movies')
         for torrent in torrents['items'][:10]:
             magnet = get_magnet_from_link(torrent['link'])
             try:
