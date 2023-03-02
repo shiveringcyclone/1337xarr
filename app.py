@@ -64,7 +64,7 @@ def view_download_progress():
     for torrent in _torrents:
         print(f"{torrent.name}: {torrent.progress * 100:.2f}% downloaded")
 
-def get_table(torrents = p.top(category='Movies')):
+def get_table(torrents = p.top(category='xxx')):
     table = Table(show_header=True, header_style="bold magenta")
 
     # add columns to the table
@@ -83,7 +83,7 @@ def check_and_download_torrents():
     while True:
         # categories = movies, tv, games, music, apps, anime, xxx, other
         # p.trending(category='anime')
-        torrents = p.top(category='Movies')
+        torrents = p.top(category='xxx')
         for torrent in torrents['items'][:10]:
             magnet = get_magnet_from_link(torrent['link'])
             try:
