@@ -84,7 +84,7 @@ def check_and_download_torrents():
         # categories = movies, tv, games, music, apps, anime, xxx, other
         # p.trending(category='anime')
         torrents = p.top(category='xxx')
-        for torrent in torrents['items'][:10]:
+        for torrent in torrents['items']:
             magnet = get_magnet_from_link(torrent['link'])
             try:
                 download_magnet(magnet, download_history)
@@ -93,6 +93,12 @@ def check_and_download_torrents():
                     logger.info(f"Error downloading {magnet}: {str(e)}")
             time.sleep(5)
 
+def remove_by_name(torrent_name):
+    torrents = tc.get_torrents()
+    for torrent in torrents:
+        if torrent.name == torrent_name:
+            tc.remove_torrent(torrent.id, delete_data=True)
+
 def delete_old_torrents():
     download_history = DownloadHistory(download_history_db)
     while True:
@@ -100,9 +106,10 @@ def delete_old_torrents():
         one_week_ago = time.time() - (7 * 24 * 60 * 60)  # One week ago in seconds
         for download_info in download_history.get_all():
             if download_info['timestamp'] < one_week_ago:
-                tc.remove_torrent(download_info['name'], delete_data=True)
+                remove_by_name(download_info['name'])
+                # tc.remove_torrent(download_info['name'], delete_data=True)
                 download_history.remove(download_info['name'])
-        time.sleep(86400) # sleep for a day before checking again         
+        time.sleep(120) # sleep for a day before checking again         
 
 def insert_completed_torrents():
     download_history = DownloadHistory(download_history_db)
